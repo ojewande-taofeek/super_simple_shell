@@ -25,8 +25,7 @@ char *_strcat(char *dest, char *src)
 {
 	int len, idx;
 
-	for (len = 0; dest[len]; len++)
-		;
+	len = _strlen(dest);
 	idx = 0;
 	while (src[idx])
 	{
@@ -36,4 +35,28 @@ char *_strcat(char *dest, char *src)
 	}
 	dest[len] = '\0';
 	return (dest);
+}
+
+
+char *_strdup(char *str)
+{
+	int idx = 0;
+	char *dup;
+
+	if (str == NULL)
+	{
+		dup = NULL;
+		return (dup);
+	}
+	dup = malloc((_strlen(str) + 1) * sizeof(char));
+	if (dup != NULL)
+	{
+		while (*str)
+		{
+			*(dup + idx) = *(str);
+			idx++;
+			str++;
+		}
+	}
+	return (dup);
 }

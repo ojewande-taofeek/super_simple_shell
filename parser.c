@@ -22,7 +22,7 @@ char **break_line(char *buffer_copy, size_t read_n)
 	}
 	idx++;
 
-	word = malloc(sizeof(char) * idx);
+	word = malloc(sizeof(char) * (idx + 1));
 	if (word == NULL)
 	{
 		perror("Error");
@@ -32,8 +32,12 @@ char **break_line(char *buffer_copy, size_t read_n)
 	idx = 0;
 	for (; token != NULL; idx++)
 	{
-		word[idx] = malloc(sizeof(char) * _strlen(token));
-		_strcpy(word[idx], token);
+		word[idx] = _strdup(token);
+		if (word[idx] == NULL)
+		{
+			perror("Error");
+			_exit(-1);
+		}
 		token = strtok(NULL, delm);
 	}
 	word[idx] = NULL;

@@ -10,13 +10,12 @@ char *path_name(char *file_name)
 	path = getenv("PATH");
 	if (path)
 	{
-		path_copy = malloc(sizeof(char) * _strlen(path));
+		path_copy = _strdup(path);
 		if (path_copy == NULL)
 		{
 			perror("Error: ");
 			_exit(-1);
 		}
-		_strcpy(path_copy, path);
 		
 		token = strtok(path_copy, delm);
 		while (token != NULL)
@@ -32,7 +31,6 @@ char *path_name(char *file_name)
 			_strcpy(final_path,token);
 			_strcat(final_path, "/");
 			_strcat(final_path, file_name);
-			_strcat(final_path, "\0");
 			if (stat(final_path, &buf) == 0)
 			{
 				free(path_copy);
@@ -46,8 +44,7 @@ char *path_name(char *file_name)
 		}
 		free(path_copy);
 		if (stat(file_name, &buf) == 0)
-			return (file_name);
-		return (NULL);
+			return _strdup(file_name);
 	}
 	return (NULL);
 }

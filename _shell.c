@@ -1,45 +1,55 @@
 #include "main.h"
 
-int main(int argc, char *argv[])
+int main(void)
 {	
-	char *buffer = NULL, *buffer_copy, *file_path, *file_name;
+	char *buffer = NULL, *buffer_copy, *file_path, *file_name, **args;
 	size_t n = 0;
-	int read_n, status;
-	(void) argc;
+	ssize_t read_n;
+	int status, idx;
 	pid_t child_pid;
 
 	put_prompt();
-	while ((read_n = getline(&buffer, &n, stdin)) != EOF)
+	while ((read_n = getline(&buffer, &n, stdin)) != -1)
 	{
 		if (read_n > 0)
 		{
-			buffer_copy = malloc(sizeof(char) * read_n);
+			buffer_copy = malloc(sizeof(char) * (read_n + 1));
 			if (buffer_copy == NULL)
 			{
-				perror("Error: ");
+				perror("Error");
 				continue;
 			}
 			_strcpy(buffer_copy, buffer);
 			
-			argv = break_line(buffer_copy, read_n);
-			file_name = argv[0];
+			args = break_line(buffer_copy, read_n);
+			if (args == NULL)
+			{
+				free(buffer_copy);
+				put_prompt;
+				continue;
+			}
+			file_name = args[0];
 			file_path = path_name(file_name);
 			child_pid = fork();
 			if (child_pid == -1)
 			{
-				perror("Error: ");
+				perror("Error");
 			}
-			if (child_pid == 0)
+			else if (child_pid == 0)
 			{
-			//	put_prompt();
-				 (executor(argv));
+				 if (file_path != NULL)
+					executor(args);
+				else
+					_exit(EXIT_FAILURE);
 			}
-			put_prompt();
-			if (child_pid > 0)	
-			{
+			else	
 				wait(&status);
-				put_prompt();
-			}
+			put_prompt();
+			free(file_path);
+	//		free(buffer_copy);
+			for (int idx = 0; args[idx] != NULL; idx++)
+				free(args[idx]);
+			free(args);
 		}
 		else
 			put_prompt();

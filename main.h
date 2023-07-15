@@ -23,12 +23,13 @@ void put_prompt();
 char **break_line(char *buffer_copy, size_t read_n);
 
 /* EXE PROTOTYPE */
-char *executor(char **argv);
+void executor(char **argv);
 /* STRING PROTOTYPES */
 
 char *_strcpy(char *dest, char *src);
 int _strlen(char *str);
 char *_strcat(char *dest, char *src);
+char *_strdup(char *str);
 
 /* PATH_FINDER PROTOTYPE */
 
